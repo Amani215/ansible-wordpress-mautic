@@ -1,0 +1,16 @@
+---
+version: '3.7'
+
+networks:
+  docker-ansible-lab:
+
+
+services:
+  mysql:
+    container_name: "{{ mysql_container_name }}"
+    networks:
+      - docker-ansible-lab
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"

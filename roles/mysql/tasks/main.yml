@@ -1,0 +1,21 @@
+---
+- name: Create MySQL server container
+  community.docker.docker_compose:
+    project_name: ansible_mysql
+    definition: "{{ lookup('template','docker-compose.yml') | from_yaml }}"
+
+- name: Get MySQL Host
+  community.docker.docker_container_info:
+    name: "{{ mysql_container_name }}"
+  register: results
+
+- name: Set MySQL Host
+  ansible.builtin.set_fact:
+    mysql_host: "{{ results.container.NetworkSettings.Networks
+      ['ansible_mysql_docker-ansible-lab'].IPAddress }}"
+# - name: Create new databases
+#   community.mysql.mysql_db:
+#     name:
+#       - wordpressdb
+#       - mauticdb
+#     state: present

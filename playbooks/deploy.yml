@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  name: Deploy mysql databases
+  roles:
+    - mysql
