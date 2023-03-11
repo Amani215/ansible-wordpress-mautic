@@ -1,0 +1,9 @@
+---
+version: 2
+dependencies:
+  python: requirements.txt
+
+ansible_config: ansible.cfg
+
+build_arg_defaults:
+  ANSIBLE_GALAXY_CLI_COLLECTION_OPTS: "--pre"
