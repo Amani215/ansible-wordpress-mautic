@@ -12,6 +12,8 @@ services:
       - docker-ansible-lab
     image: wordpress:6.1.1-fpm-alpine
     restart: always
+    ports:
+      - 8080:80
     environment:
       WORDPRESS_DB_HOST: "{{ mysql_host }}"
       WORDPRESS_DB_USER: "{{ databases[0].db_user }}"

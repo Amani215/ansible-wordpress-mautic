@@ -8,3 +8,8 @@
   name: Deploy wordpress
   roles:
     - wordpress
+
+- hosts: localhost
+  name: Deploy mautic
+  roles:
+    - mautic

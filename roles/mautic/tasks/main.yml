@@ -1,0 +1,5 @@
+---
+- name: Create Mautic container
+  community.docker.docker_compose:
+    project_name: ansible_mautic
+    definition: "{{ lookup('template','docker-compose.yml') | from_yaml }}"

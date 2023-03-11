@@ -1,0 +1,19 @@
+---
+version: '3.7'
+
+networks:
+  docker-ansible-lab:
+
+
+services:
+  mautic:
+    container_name: "{{ mautic_container_name }}"
+    networks:
+      - docker-ansible-lab
+    image: mautic/mautic:v4-fpm
+    environment:
+      - MAUTIC_DB_HOST="{{ mysql_host }}"
+      - MAUTIC_DB_USER="{{ databases[1].db_user }}"
+      - MAUTIC_DB_PASSWORD="{{ databases[1].db_password }}"
+      - MAUTIC_DB_NAME="{{ databases[1].db_name }}"
+    restart: always
