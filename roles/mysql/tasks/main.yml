@@ -13,9 +13,7 @@
   ansible.builtin.set_fact:
     mysql_host: "{{ results.container.NetworkSettings.Networks
       ['ansible_mysql_docker-ansible-lab'].IPAddress }}"
-# - name: Create new databases
-#   community.mysql.mysql_db:
-#     name:
-#       - wordpressdb
-#       - mauticdb
-#     state: present
+
+- name: Create new databases
+  ansible.builtin.include_tasks: db.yml
+  with_items: "{{ databases }}"
