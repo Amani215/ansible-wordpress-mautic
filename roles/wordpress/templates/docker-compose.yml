@@ -1,0 +1,19 @@
+---
+version: '3.7'
+
+networks:
+  docker-ansible-lab:
+
+
+services:
+  wp:
+    container_name: "{{ wordpress_container_name }}"
+    networks:
+      - docker-ansible-lab
+    image: wordpress:6.1.1-fpm-alpine
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: "{{ mysql_host }}"
+      WORDPRESS_DB_USER: "{{ databases[0].db_user }}"
+      WORDPRESS_DB_PASSWORD: "{{ databases[0].db_password }}"
+      WORDPRESS_DB_NAME: "{{ databases[0].db_name }}"

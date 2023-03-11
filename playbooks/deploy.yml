@@ -3,3 +3,8 @@
   name: Deploy mysql databases
   roles:
     - mysql
+
+- hosts: localhost
+  name: Deploy wordpress
+  roles:
+    - wordpress

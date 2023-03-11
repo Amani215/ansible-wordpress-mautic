@@ -1,0 +1,5 @@
+---
+- name: Create Wordpress container
+  community.docker.docker_compose:
+    project_name: ansible_wordpress
+    definition: "{{ lookup('template','docker-compose.yml') | from_yaml }}"
