@@ -1,19 +1,41 @@
 ---
-- name: Create new databases
-  community.mysql.mysql_db:
-    login_host: "{{ mysql_host }}"
-    login_user: "{{ mysql_root_username }}"
-    login_password: "{{ mysql_root_password }}"
-    name:
-      - "{{ item.db_name }}"
-    state: present
+- name: Set Failure Counter
+  ansible.builtin.set_fact:
+    fi: "{{ 0 if fi is undefined else (fi | int) +1 }}"
 
-- name: Create database user
-  community.mysql.mysql_user:
-    login_host: "{{ mysql_host }}"
-    login_user: "{{ mysql_root_username }}"
-    login_password: "{{ mysql_root_password }}"
-    name: "{{ item.db_user }}"
-    password: "{{ item.db_password }}"
-    priv: "{{ item.db_name }}.*:ALL"
-    state: present
+- name: Create Db and user
+  block:
+    - name: Create new databases
+      community.mysql.mysql_db:
+        login_host: "{{ mysql_host }}"
+        login_user: "{{ mysql_root_username }}"
+        login_password: "{{ mysql_root_password }}"
+        name:
+          - "{{ item.db_name }}"
+        state: present
+
+    - name: Create database user
+      community.mysql.mysql_user:
+        login_host: "{{ mysql_host }}"
+        login_user: "{{ mysql_root_username }}"
+        login_password: "{{ mysql_root_password }}"
+        name: "{{ item.db_user }}"
+        password: "{{ item.db_password }}"
+        priv: "{{ item.db_name }}.*:ALL"
+        state: present
+
+    - name: Reset Failure Counter
+      ansible.builtin.set_fact:
+        fi: "-1"
+  rescue:
+    - name: Pause for 10 seconds
+      ansible.builtin.pause:
+        seconds: 10
+    - name: Create new databases
+      ansible.builtin.include_tasks: db.yml
+      with_items: "{{ databases }}"
+      when: (fi |int) < 3
+    - name: Fail
+      ansible.builtin.fail:
+        msg: FAIIIIILURE
+      when: (fi |int) > 2
